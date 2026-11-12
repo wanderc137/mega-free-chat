@@ -258,7 +258,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
   .section{padding:72px 0}
 }
 </style>
-</head>
+<link rel="stylesheet" href="assets/community.css?v=5"></head>
 <body style="--accent:#4F8CFF;--accent2:#0F1115">
 <div class="grid-overlay"></div>
 <div class="glow one"></div>
@@ -275,6 +275,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
       <a href="#como">Cómo funciona</a>
       <a href="#arquitectura">Arquitectura</a>
       <a href="#docs">Documentación</a>
+      <a href="#comunidad">Comunidad</a>
       <a class="btn btn-ghost" style="padding:9px 15px" href="https://github.com/wanderc137/mega-free-chat" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </div>
@@ -392,8 +393,8 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
   <div class="wrap">
     <div class="cta-card reveal">
       <div class="kicker" style="justify-content:center">Portfolio · 21 proyectos</div>
-      <h2>¿Construimos algo así?</h2>
-      <p>¿Querés una interfaz de chat que aguante demos y modelos gratuitos inestables? Este es el patrón.</p>
+      <h2>¿Te animás?</h2>
+      <p>Usá esto como base y referencia para montar un chat multi-modelo con SSE y modelos gratuitos, sin atarte a un proveedor. Este proyecto es la prueba de que se puede hacer con componentes reales.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="https://wanderc137.github.io/" target="_blank" rel="noopener">Ver todos los proyectos <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn-ghost" href="https://github.com/wanderc137/mega-free-chat" target="_blank" rel="noopener">Explorar el código</a>
@@ -445,5 +446,8 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 })();
 </script>
+
+<script>window.PORTFOLIO_COMMUNITY = {"account": "wanderc137", "repo": "mega-free-chat", "coinNamespace": "wanderc137-mega-free-chat-coins-v1", "faqs": [{"q": "¿Qué es?", "a": "Una pasarela web de chat que descubre modelos gratuitos de OpenRouter y rota cuando uno falla."}, {"q": "¿Cómo funciona el streaming?", "a": "Usa <b>SSE</b>: el navegador recibe los tokens a medida que llegan, sin polling."}, {"q": "¿Dónde se guarda la API key?", "a": "En localStorage del navegador o en <code>.env</code> del servidor; no se publica en el repositorio."}, {"q": "¿Qué puerto usa?", "a": "<b>8000</b> por defecto."}, {"q": "¿Cuáles son los límites?", "a": "Los modelos $0 son temporales, no hay autenticación multiusuario y el failover depende del SDK."}]};</script>
+<script src="assets/community.js?v=5" defer></script>
 </body>
 </html>
