@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="archTitle archDesc">
+  <title id="archTitle">Arquitectura de Mega Free Chat</title>
+  <desc id="archDesc">Diagrama de tres zonas: el navegador ejecuta la interfaz y guarda la API key opcional; el servidor FastAPI en el puerto 8000 contiene el router, el pool de modelos y el cliente de OpenRouter; la nube de OpenRouter expone el catálogo y el streaming de completions.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #0f1115; }
+      .zone { fill: #10131a; stroke: #262b36; stroke-width: 1.2; }
+      .card { fill: #171a21; stroke: #262b36; stroke-width: 1.2; }
+      .card-accent { stroke: #4f8cff; }
+      .card-warn { stroke: #f1c40f; }
+      .title { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 26px; font-weight: 600; fill: #e6e6e6; }
+      .subtitle { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 13px; font-weight: 400; fill: #8b93a1; }
+      .zonelabel { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 600; fill: #8b93a1; letter-spacing: 1.4px; }
+      .cardtitle { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; font-weight: 600; fill: #e6e6e6; }
+      .cardtext { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12px; font-weight: 400; fill: #8b93a1; }
+      .cardtext-strong { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12px; font-weight: 600; fill: #c9cdd6; }
+      .arrow { stroke: #8b93a1; stroke-width: 1.6; fill: none; }
+      .arrow-dash { stroke: #8b93a1; stroke-width: 1.4; fill: none; stroke-dasharray: 5 5; }
+      .gaptext { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10px; fill: #8b93a1; letter-spacing: 1px; }
+      .legend { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12px; fill: #8b93a1; }
+      .footer { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #5f6774; }
+    </style>
+
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#8b93a1"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="760"/>
+
+  <text class="title" x="32" y="46">Mega Free Chat · Arquitectura</text>
+  <text class="subtitle" x="32" y="72">Cuatro módulos, dos saltos de red y una regla: si un modelo falla, se prueba el siguiente.</text>
+
+  <!-- Zona A: navegador -->
+  <rect class="zone" x="32" y="104" width="304" height="548" rx="14"/>
+  <text class="zonelabel" x="48" y="132">01 · NAVEGADOR</text>
+
+  <rect class="card card-accent" x="48" y="150" width="272" height="154" rx="10"/>
+  <text class="cardtitle" x="64" y="178">static/index.html</text>
+  <text class="cardtext" x="64" y="202">Chat con streaming SSE</text>
+  <text class="cardtext" x="64" y="224">Panel del pool cada 20 s</text>
+  <text class="cardtext" x="64" y="246">Historial en memoria (30)</text>
+  <text class="cardtext" x="64" y="268">Sin build, sin framework</text>
+
+  <rect class="card" x="48" y="326" width="272" height="112" rx="10"/>
+  <text class="cardtitle" x="64" y="354">localStorage</text>
+  <text class="cardtext" x="64" y="378">megaFreeChat_apiKey</text>
+  <text class="cardtext" x="64" y="400">API key opcional del usuario</text>
+
+  <rect class="card" x="48" y="460" width="272" height="124" rx="10"/>
+  <text class="cardtitle" x="64" y="488">fetch + ReadableStream</text>
+  <text class="cardtext" x="64" y="512">POST /api/chat (JSON)</text>
+  <text class="cardtext" x="64" y="534">Lee eventos separados por línea</text>
+  <text class="cardtext" x="64" y="556">status · chunk · done · error</text>
+
+  <!-- flecha A-B -->
+  <line class="arrow" x1="336" y1="420" x2="368" y2="420" marker-end="url(#ah)" marker-start="url(#ah)"/>
+  <text class="gaptext" x="352" y="352" transform="rotate(-90 352 352)" text-anchor="middle">HTTP 8000</text>
+
+  <!-- Zona B: servidor -->
+  <rect class="zone" x="368" y="104" width="464" height="548" rx="14"/>
+  <text class="zonelabel" x="384" y="132">02 · SERVIDOR LOCAL · :8000</text>
+
+  <rect class="card card-accent" x="384" y="150" width="432" height="124" rx="10"/>
+  <text class="cardtitle" x="400" y="178">server.py · FastAPI + Uvicorn</text>
+  <text class="cardtext" x="400" y="202">/            interfaz estática</text>
+  <text class="cardtext" x="400" y="224">/api/models  estado del pool</text>
+  <text class="cardtext" x="400" y="246">/api/chat    stream SSE</text>
+  <text class="cardtext" x="400" y="268">CORS abierto · sin autenticación</text>
+
+  <rect class="card card-accent" x="384" y="298" width="432" height="92" rx="10"/>
+  <text class="cardtitle" x="400" y="326">FreeModelRouter</text>
+  <text class="cardtext" x="400" y="348">Ordena candidatos: chinos primero</text>
+  <text class="cardtext" x="400" y="370">Intenta, marca cooldown, reintenta</text>
+
+  <rect class="card" x="384" y="414" width="208" height="160" rx="10"/>
+  <text class="cardtitle" x="400" y="442">ModelsPool</text>
+  <text class="cardtext" x="400" y="466">GET /api/v1/models</text>
+  <text class="cardtext" x="400" y="488">pricing == &quot;0&quot;</text>
+  <text class="cardtext" x="400" y="510">active / backoff / failed</text>
+  <text class="cardtext" x="400" y="532">Refresco cada 6 h</text>
+  <text class="cardtext" x="400" y="554">Estado en RAM + Lock</text>
+
+  <rect class="card" x="608" y="414" width="208" height="160" rx="10"/>
+  <text class="cardtitle" x="624" y="442">OpenRouterClient</text>
+  <text class="cardtext" x="624" y="466">SDK oficial de openai</text>
+  <text class="cardtext" x="624" y="488">base_url de OpenRouter</text>
+  <text class="cardtext" x="624" y="510">stream = True</text>
+  <text class="cardtext" x="624" y="532">Un modelo por llamada</text>
+  <text class="cardtext" x="624" y="554">El failover vive en router</text>
+
+  <text class="cardtext" x="384" y="614">Un pool y un cliente por proceso · el router no guarda historial</text>
+
+  <!-- flecha B-C -->
+  <line class="arrow" x1="832" y1="420" x2="864" y2="420" marker-end="url(#ah)" marker-start="url(#ah)"/>
+  <text class="gaptext" x="848" y="352" transform="rotate(-90 848 352)" text-anchor="middle">HTTPS 443</text>
+
+  <!-- Zona C: OpenRouter -->
+  <rect class="zone" x="864" y="104" width="304" height="548" rx="14"/>
+  <text class="zonelabel" x="880" y="132">03 · OPENROUTER · NUBE</text>
+
+  <rect class="card" x="880" y="150" width="272" height="136" rx="10"/>
+  <text class="cardtitle" x="896" y="178">GET /api/v1/models</text>
+  <text class="cardtext" x="896" y="202">Catálogo público</text>
+  <text class="cardtext" x="896" y="224">Precio como string</text>
+  <text class="cardtext" x="896" y="246">&quot;0&quot; = gratuito hoy</text>
+  <text class="cardtext" x="896" y="268">Puede cambiar sin aviso</text>
+
+  <rect class="card card-accent" x="880" y="310" width="272" height="152" rx="10"/>
+  <text class="cardtitle" x="896" y="338">POST /chat/completions</text>
+  <text class="cardtext" x="896" y="362">Contrato compatible OpenAI</text>
+  <text class="cardtext" x="896" y="384">stream: true</text>
+  <text class="cardtext" x="896" y="406">SSE de tokens</text>
+  <text class="cardtext" x="896" y="428">Un modelo por petición</text>
+  <text class="cardtext" x="896" y="450">Cuota gratuita por cuenta</text>
+
+  <rect class="card card-warn" x="880" y="486" width="272" height="132" rx="10"/>
+  <text class="cardtitle" x="896" y="514">Límites reales</text>
+  <text class="cardtext" x="896" y="538">429 · rate limit</text>
+  <text class="cardtext" x="896" y="560">5xx · modelo caído</text>
+  <text class="cardtext" x="896" y="582">Cuota diaria gratuita</text>
+  <text class="cardtext" x="896" y="604">Disponibilidad variable</text>
+
+  <!-- flechas internas del servidor -->
+  <line class="arrow" x1="600" y1="274" x2="600" y2="298" marker-end="url(#ah)"/>
+  <line class="arrow" x1="488" y1="390" x2="488" y2="414" marker-end="url(#ah)"/>
+  <line class="arrow" x1="712" y1="390" x2="712" y2="414" marker-end="url(#ah)"/>
+  <line class="arrow-dash" x1="544" y1="414" x2="544" y2="390" marker-end="url(#ah)"/>
+  <line class="arrow-dash" x1="768" y1="414" x2="768" y2="390" marker-end="url(#ah)"/>
+
+  <!-- leyenda -->
+  <circle cx="40" cy="684" r="5" fill="#2ecc71"/>
+  <text class="legend" x="52" y="688">active</text>
+  <circle cx="120" cy="684" r="5" fill="#f1c40f"/>
+  <text class="legend" x="132" y="688">backoff (cooldown)</text>
+  <circle cx="270" cy="684" r="5" fill="#e74c3c"/>
+  <text class="legend" x="282" y="688">failed</text>
+  <line class="arrow" x1="360" y1="684" x2="400" y2="684" marker-end="url(#ah)"/>
+  <text class="legend" x="410" y="688">petición / stream</text>
+  <line class="arrow-dash" x1="560" y1="684" x2="600" y2="684" marker-end="url(#ah)"/>
+  <text class="legend" x="610" y="688">lectura de estado</text>
+
+  <text class="footer" x="32" y="736">Mega Free Chat · documentación técnica · los modelos gratuitos son un estado del catálogo, no una garantía.</text>
+</svg>

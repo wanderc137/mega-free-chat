@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="940" viewBox="0 0 1200 940" role="img" aria-labelledby="foTitle foDesc">
+  <title id="foTitle">Failover de modelos en Mega Free Chat</title>
+  <desc id="foDesc">Diagrama de flujo: se consultan los modelos disponibles, se ordenan con prioridad china, se prueba cada candidato y, si falla, se le aplica un cooldown y se pasa al siguiente hasta agotar la lista.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #0f1115; }
+      .box { fill: #171a21; stroke: #262b36; stroke-width: 1.2; }
+      .box-accent { fill: #171a21; stroke: #4f8cff; stroke-width: 1.3; }
+      .box-ok { fill: #171a21; stroke: #2ecc71; stroke-width: 1.3; }
+      .box-warn { fill: #171a21; stroke: #f1c40f; stroke-width: 1.3; }
+      .box-err { fill: #171a21; stroke: #e74c3c; stroke-width: 1.3; }
+      .diamond { fill: #171a21; stroke: #4f8cff; stroke-width: 1.3; }
+      .title { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 26px; font-weight: 600; fill: #e6e6e6; }
+      .subtitle { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 13px; fill: #8b93a1; }
+      .lane { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 600; fill: #8b93a1; letter-spacing: 1.4px; }
+      .step { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; font-weight: 600; fill: #e6e6e6; }
+      .small { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12px; fill: #8b93a1; }
+      .strong { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 13px; font-weight: 600; fill: #e6e6e6; }
+      .ok { fill: #2ecc71; font-weight: 600; }
+      .warn { fill: #f1c40f; font-weight: 600; }
+      .err { fill: #e74c3c; font-weight: 600; }
+      .arrow { stroke: #8b93a1; stroke-width: 1.7; fill: none; }
+      .loop { stroke: #4f8cff; stroke-width: 1.7; fill: none; }
+      .glabel { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #8b93a1; }
+      .loopl { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10px; fill: #4f8cff; letter-spacing: 1px; }
+      .legend { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12px; fill: #8b93a1; }
+      .footer { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #5f6774; }
+    </style>
+    <marker id="foArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#8b93a1"/>
+    </marker>
+    <marker id="foLoop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#4f8cff"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="940"/>
+
+  <text class="title" x="32" y="46">Mega Free Chat · Failover</text>
+  <text class="subtitle" x="32" y="72">Qué ocurre entre el clic y la primera palabra cuando el modelo elegido no responde.</text>
+
+  <text class="lane" x="290" y="112">RECORRIDO</text>
+  <text class="lane" x="680" y="112">SALIDAS</text>
+
+  <!-- inicio -->
+  <rect class="box-accent" x="350" y="124" width="240" height="44" rx="22"/>
+  <text class="step" x="470" y="151" text-anchor="middle">POST /api/chat</text>
+
+  <line class="arrow" x1="470" y1="168" x2="470" y2="190" marker-end="url(#foArrow)"/>
+
+  <!-- paso 1 -->
+  <rect class="box" x="290" y="190" width="360" height="62" rx="10"/>
+  <text class="step" x="306" y="216">1 · available_models()</text>
+  <text class="small" x="306" y="238">Descarta los que están en cooldown activo</text>
+
+  <line class="arrow" x1="470" y1="252" x2="470" y2="272" marker-end="url(#foArrow)"/>
+
+  <!-- decisión 1 -->
+  <polygon class="diamond" points="470,272 610,328 470,384 330,328"/>
+  <text class="strong" x="470" y="322" text-anchor="middle">¿hay candidatos?</text>
+  <text class="small" x="470" y="342" text-anchor="middle">lista no vacía</text>
+
+  <line class="arrow" x1="610" y1="328" x2="680" y2="328" marker-end="url(#foArrow)"/>
+  <text class="glabel" x="640" y="318" text-anchor="middle">no</text>
+
+  <rect class="box-err" x="680" y="286" width="480" height="84" rx="10"/>
+  <text class="strong err" x="696" y="312">RouterError</text>
+  <text class="small" x="696" y="334">«No hay ningún modelo gratuito disponible en este momento.»</text>
+  <text class="small" x="696" y="354">La UI recibe un evento error; el HTTP sigue siendo 200</text>
+
+  <line class="arrow" x1="470" y1="384" x2="470" y2="410" marker-end="url(#foArrow)"/>
+  <text class="glabel" x="480" y="402">sí</text>
+
+  <!-- paso 2 -->
+  <rect class="box" x="290" y="410" width="360" height="62" rx="10"/>
+  <text class="step" x="306" y="436">2 · ordenar candidatos</text>
+  <text class="small" x="306" y="458">(not is_chinese, name.lower()) · chinos primero</text>
+
+  <line class="arrow" x1="470" y1="472" x2="470" y2="494" marker-end="url(#foArrow)"/>
+
+  <!-- paso 3 -->
+  <rect class="box box-accent" x="290" y="494" width="360" height="62" rx="10"/>
+  <text class="step" x="306" y="520">3 · tomar el siguiente</text>
+  <text class="small" x="306" y="542">model.chat_stream(model_id, messages)</text>
+
+  <line class="arrow" x1="470" y1="556" x2="470" y2="576" marker-end="url(#foArrow)"/>
+
+  <!-- decisión 2 -->
+  <polygon class="diamond" points="470,576 610,632 470,688 330,632"/>
+  <text class="strong" x="470" y="626" text-anchor="middle">¿responde?</text>
+  <text class="small" x="470" y="646" text-anchor="middle">primer chunk sin error</text>
+
+  <line class="arrow" x1="610" y1="632" x2="680" y2="632" marker-end="url(#foArrow)"/>
+  <text class="glabel" x="640" y="622" text-anchor="middle">sí</text>
+
+  <rect class="box-ok" x="680" y="592" width="480" height="80" rx="10"/>
+  <text class="strong ok" x="696" y="618">mark_success() · streaming</text>
+  <text class="small" x="696" y="640">Devuelve (model_id, generador) y emite status + chunks SSE</text>
+  <text class="small" x="696" y="660">El cooldown del modelo queda en cero</text>
+
+  <line class="arrow" x1="470" y1="688" x2="470" y2="710" marker-end="url(#foArrow)"/>
+  <text class="glabel" x="480" y="704">no</text>
+
+  <!-- paso 4 -->
+  <rect class="box box-warn" x="290" y="710" width="360" height="62" rx="10"/>
+  <text class="step" x="306" y="736">4 · clasificar el fallo</text>
+  <text class="small" x="306" y="758">mark_failure(model, error, status_code)</text>
+
+  <!-- chips de cooldown -->
+  <rect class="box" x="290" y="792" width="112" height="64" rx="8"/>
+  <text class="strong warn" x="302" y="816">429</text>
+  <text class="small" x="302" y="836">cooldown ×2</text>
+  <text class="small" x="302" y="850">600 s</text>
+
+  <rect class="box" x="414" y="792" width="112" height="64" rx="8"/>
+  <text class="strong warn" x="426" y="816">5xx</text>
+  <text class="small" x="426" y="836">cooldown</text>
+  <text class="small" x="426" y="850">300 s</text>
+
+  <rect class="box" x="538" y="792" width="112" height="64" rx="8"/>
+  <text class="strong warn" x="550" y="816">red</text>
+  <text class="small" x="550" y="836">cooldown</text>
+  <text class="small" x="550" y="850">300 s</text>
+
+  <line class="arrow" x1="470" y1="772" x2="470" y2="792" marker-end="url(#foArrow)"/>
+
+  <!-- bucle -->
+  <path class="loop" d="M290,745 H230 V525 H282" marker-end="url(#foLoop)"/>
+  <text class="loopl" x="216" y="650" transform="rotate(-90 216 650)" text-anchor="middle">SIGUIENTE CANDIDATO</text>
+
+  <!-- agotado -->
+  <line class="arrow" x1="650" y1="824" x2="680" y2="800" marker-end="url(#foArrow)"/>
+  <rect class="box-err" x="680" y="760" width="480" height="84" rx="10"/>
+  <text class="strong err" x="696" y="786">Si la lista se agota</text>
+  <text class="small" x="696" y="808">RouterError con el detalle de cada intento</text>
+  <text class="small" x="696" y="828">Ningún modelo gratuitos respondió a esta petición</text>
+
+  <!-- leyenda -->
+  <circle cx="40" cy="898" r="5" fill="#2ecc71"/>
+  <text class="legend" x="52" y="902">éxito</text>
+  <circle cx="112" cy="898" r="5" fill="#f1c40f"/>
+  <text class="legend" x="124" y="902">cooldown</text>
+  <circle cx="206" cy="898" r="5" fill="#e74c3c"/>
+  <text class="legend" x="218" y="902">error final</text>
+  <line class="loop" x1="310" y1="898" x2="350" y2="898" marker-end="url(#foLoop)"/>
+  <text class="legend" x="360" y="902">reintento con el siguiente modelo</text>
+
+  <text class="footer" x="32" y="930">Mega Free Chat · documentación técnica · el cooldown vive en memoria y no se comparte entre procesos.</text>
+</svg>

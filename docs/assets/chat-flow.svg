@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="880" viewBox="0 0 1200 880" role="img" aria-labelledby="cfTitle cfDesc">
+  <title id="cfTitle">Flujo de un mensaje en Mega Free Chat</title>
+  <desc id="cfDesc">Diagrama de secuencia entre el usuario, la interfaz, FastAPI, el router con el pool y OpenRouter: la petición se rutea, se abre el stream y los tokens se reenvían como eventos SSE hasta el evento done.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #0f1115; }
+      .actor { fill: #171a21; stroke: #262b36; stroke-width: 1.2; }
+      .actor-accent { stroke: #4f8cff; }
+      .lifeline { stroke: #262b36; stroke-width: 1.2; stroke-dasharray: 4 6; }
+      .title { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 26px; font-weight: 600; fill: #e6e6e6; }
+      .subtitle { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 13px; fill: #8b93a1; }
+      .actorname { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; font-weight: 600; fill: #e6e6e6; }
+      .actorrole { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #8b93a1; }
+      .msg { stroke: #8b93a1; stroke-width: 1.6; fill: none; }
+      .msg-back { stroke: #2ecc71; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+      .msg-sse { stroke: #4f8cff; stroke-width: 1.6; fill: none; }
+      .lbl { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; fill: #c9cdd6; }
+      .lbl-dim { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #8b93a1; }
+      .note { fill: #171a21; stroke: #262b36; stroke-width: 1.1; }
+      .note-warn { stroke: #f1c40f; }
+      .notetext { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12px; fill: #8b93a1; }
+      .notehead { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 600; fill: #f1c40f; letter-spacing: 1px; }
+      .footer { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #5f6774; }
+    </style>
+    <marker id="cfArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#8b93a1"/>
+    </marker>
+    <marker id="cfArrowBack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#2ecc71"/>
+    </marker>
+    <marker id="cfArrowSse" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#4f8cff"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="880"/>
+
+  <text class="title" x="32" y="46">Mega Free Chat · Un mensaje, paso a paso</text>
+  <text class="subtitle" x="32" y="72">Del Enter al último token: qué viaja, en qué orden y quién decide el modelo.</text>
+
+  <!-- actores -->
+  <rect class="actor" x="20" y="92" width="160" height="58" rx="10"/>
+  <text class="actorname" x="100" y="117" text-anchor="middle">Usuario</text>
+  <text class="actorrole" x="100" y="137" text-anchor="middle">navegador</text>
+
+  <rect class="actor actor-accent" x="235" y="92" width="170" height="58" rx="10"/>
+  <text class="actorname" x="320" y="117" text-anchor="middle">UI · index.html</text>
+  <text class="actorrole" x="320" y="137" text-anchor="middle">fetch + ReadableStream</text>
+
+  <rect class="actor actor-accent" x="470" y="92" width="180" height="58" rx="10"/>
+  <text class="actorname" x="560" y="117" text-anchor="middle">FastAPI · :8000</text>
+  <text class="actorrole" x="560" y="137" text-anchor="middle">/api/chat</text>
+
+  <rect class="actor" x="710" y="92" width="180" height="58" rx="10"/>
+  <text class="actorname" x="800" y="117" text-anchor="middle">Router + Pool</text>
+  <text class="actorrole" x="800" y="137" text-anchor="middle">elige y reintenta</text>
+
+  <rect class="actor" x="960" y="92" width="180" height="58" rx="10"/>
+  <text class="actorname" x="1050" y="117" text-anchor="middle">OpenRouter</text>
+  <text class="actorrole" x="1050" y="137" text-anchor="middle">nube · HTTPS 443</text>
+
+  <!-- líneas de vida -->
+  <line class="lifeline" x1="100" y1="150" x2="100" y2="780"/>
+  <line class="lifeline" x1="320" y1="150" x2="320" y2="780"/>
+  <line class="lifeline" x1="560" y1="150" x2="560" y2="780"/>
+  <line class="lifeline" x1="800" y1="150" x2="800" y2="780"/>
+  <line class="lifeline" x1="1050" y1="150" x2="1050" y2="780"/>
+
+  <!-- 1 -->
+  <line class="msg" x1="100" y1="200" x2="320" y2="200" marker-end="url(#cfArrow)"/>
+  <text class="lbl" x="210" y="192" text-anchor="middle">1 · escribe y pulsa Enter</text>
+
+  <!-- 2 -->
+  <line class="msg" x1="320" y1="248" x2="560" y2="248" marker-end="url(#cfArrow)"/>
+  <text class="lbl" x="440" y="240" text-anchor="middle">2 · POST /api/chat</text>
+  <text class="lbl-dim" x="440" y="262" text-anchor="middle">{ message, history, api_key }</text>
+
+  <!-- 3 -->
+  <line class="msg" x1="560" y1="300" x2="800" y2="300" marker-end="url(#cfArrow)"/>
+  <text class="lbl" x="680" y="292" text-anchor="middle">3 · router.stream(messages)</text>
+
+  <!-- 4 self loop -->
+  <path class="msg" d="M800,330 h-70 v42 h62" marker-end="url(#cfArrow)"/>
+  <text class="lbl" x="722" y="346" text-anchor="end">4 · available_models()</text>
+  <text class="lbl-dim" x="722" y="362" text-anchor="end">orden: chinos primero</text>
+
+  <!-- 5 -->
+  <line class="msg" x1="800" y1="430" x2="1050" y2="430" marker-end="url(#cfArrow)"/>
+  <text class="lbl" x="925" y="422" text-anchor="middle">5 · POST /chat/completions</text>
+  <text class="lbl-dim" x="925" y="446" text-anchor="middle">model + stream: true</text>
+
+  <!-- 6 -->
+  <line class="msg-back" x1="1050" y1="486" x2="800" y2="486" marker-end="url(#cfArrowBack)"/>
+  <text class="lbl" x="925" y="478" text-anchor="middle">6 · primer chunk (o error)</text>
+
+  <!-- 7 -->
+  <line class="msg-sse" x1="800" y1="536" x2="560" y2="536" marker-end="url(#cfArrowSse)"/>
+  <text class="lbl" x="680" y="528" text-anchor="middle">7 · status streaming + chunks</text>
+
+  <!-- 8 -->
+  <line class="msg-sse" x1="560" y1="584" x2="320" y2="584" marker-end="url(#cfArrowSse)"/>
+  <text class="lbl" x="440" y="576" text-anchor="middle">8 · event: status</text>
+  <text class="lbl-dim" x="440" y="598" text-anchor="middle">event: chunk { content }</text>
+
+  <!-- 9 -->
+  <line class="msg-back" x1="1050" y1="644" x2="800" y2="644" marker-end="url(#cfArrowBack)"/>
+  <text class="lbl" x="925" y="636" text-anchor="middle">9 · más chunks · fin del stream</text>
+
+  <!-- 10 -->
+  <line class="msg-sse" x1="800" y1="692" x2="560" y2="692" marker-end="url(#cfArrowSse)"/>
+  <text class="lbl" x="680" y="684" text-anchor="middle">10 · event: done { model }</text>
+
+  <!-- 11 -->
+  <line class="msg-sse" x1="560" y1="738" x2="320" y2="738" marker-end="url(#cfArrowSse)"/>
+  <text class="lbl" x="440" y="730" text-anchor="middle">11 · event: done</text>
+
+  <!-- 12 -->
+  <line class="msg" x1="320" y1="778" x2="100" y2="778" marker-end="url(#cfArrow)"/>
+  <text class="lbl" x="210" y="770" text-anchor="middle">12 · render acumulado</text>
+
+  <!-- notas -->
+  <rect class="note" x="32" y="806" width="360" height="44" rx="8"/>
+  <text class="notetext" x="46" y="833">Historial: últimos 30 mensajes, reenviado en cada POST.</text>
+
+  <rect class="note note-warn" x="408" y="806" width="380" height="44" rx="8"/>
+  <text class="notetext" x="422" y="833">HTTP 200 aunque el stream termine en event: error.</text>
+
+  <rect class="note note-warn" x="804" y="806" width="364" height="44" rx="8"/>
+  <text class="notetext" x="818" y="833">Sin heartbeat ni Last-Event-ID: si se corta, se perdió.</text>
+
+  <text class="footer" x="32" y="872">Mega Free Chat · documentación técnica · SSE con delimitador de línea en blanco entre eventos.</text>
+</svg>

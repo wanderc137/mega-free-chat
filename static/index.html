@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mega Free Chat</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --border: #262b36;
+      --text: #e6e6e6;
+      --muted: #8b93a1;
+      --accent: #4f8cff;
+      --ok: #2ecc71;
+      --warn: #f1c40f;
+      --err: #e74c3c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--panel);
+    }
+    header h1 { font-size: 18px; margin: 0; }
+    header .sub { color: var(--muted); font-size: 12px; }
+    .pill {
+      margin-left: auto;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .pill.ok { color: var(--ok); border-color: var(--ok); }
+    .pill.busy { color: var(--warn); border-color: var(--warn); }
+
+    /* Campo de API key discreto */
+    .keybox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 12px;
+    }
+    .keybox .toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .keybox .toggle:hover { color: var(--text); border-color: var(--accent); }
+    .keybox .toggle.has-key { color: var(--ok); border-color: var(--ok); }
+    .keybox input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+      width: 260px;
+    }
+    .keybox input:focus { outline: none; border-color: var(--accent); }
+    .keybox .save {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* Panel lateral con el estado del pool */
+    aside {
+      width: 280px;
+      border-right: 1px solid var(--border);
+      background: var(--panel);
+      padding: 16px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    aside h3 { margin: 0 0 12px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .model {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .model .name { font-weight: 600; word-break: break-word; }
+    .model .meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .model.active { border-color: var(--ok); background: rgba(46,204,113,.08); }
+    .model.active .status { box-shadow: 0 0 6px var(--ok); }
+    .model .tag-chinese {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      border: 1px solid var(--warn);
+      color: var(--warn);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .model .status { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+    .st-active { background: var(--ok); }
+    .st-backoff { background: var(--warn); }
+    .st-failed { background: var(--err); }
+    .empty { color: var(--muted); font-size: 13px; }
+    .group-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin: 4px 0 8px;
+    }
+    aside hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 14px 0;
+    }
+
+    /* Chat principal: estilo minimalista tipo CLI */
+    main { flex: 1; display: flex; flex-direction: column; }
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .msg {
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 6px;
+    }
+    .msg .role {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 2px;
+      margin-top: 14px;
+    }
+    .msg.user .body { color: var(--text); }
+    .msg.bot .body { color: #c9cdd6; }
+    .msg .model-tag { display: block; font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .msg.error { color: var(--err); }
+    .msg.error .role { color: var(--err); }
+
+    #inputbar {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--panel);
+      display: flex;
+      gap: 10px;
+    }
+    #inputbar textarea {
+      flex: 1;
+      resize: none;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      min-height: 48px;
+    }
+    #inputbar textarea:focus { outline: none; border-color: var(--accent); }
+    #send {
+      background: var(--accent);
+      color: #fff;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 22px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    #send:disabled { opacity: .5; cursor: not-allowed; }
+    .typing { color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mega Free Chat</h1>
+    <span class="sub">Pasarela de modelos gratuitos · OpenRouter</span>
+    <div class="keybox" id="keybox">
+      <button class="toggle" id="keyToggle" title="Configurar API key de OpenRouter">API key</button>
+      <span class="keydots" id="keyDots" style="display:none; color:var(--ok); font-size:12px;">••••••</span>
+      <input id="keyInput" type="password" placeholder="pega tu API key..." style="display:none;" autocomplete="off" />
+      <button class="save" id="keySave" style="display:none;">Guardar</button>
+    </div>
+    <span class="pill" id="conn">—</span>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <h3>Modelos gratuitos disponibles</h3>
+      <div id="models"></div>
+    </aside>
+
+    <main>
+      <div id="chat">
+        <div class="msg bot"><span class="role">Sistema</span><span class="body">Escribe un mensaje y lo enrutaré automáticamente al modelo gratuito disponible (con preferencia a los chinos).</span></div>
+      </div>
+      <div id="inputbar">
+        <textarea id="prompt" rows="1" placeholder="Escribe tu mensaje... (Enter para enviar, Shift+Enter salto de línea)"></textarea>
+        <button id="send">Enviar</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const promptEl = document.getElementById('prompt');
+    const sendBtn = document.getElementById('send');
+    const conn = document.getElementById('conn');
+    let history = [];
+    let activeModel = '';
+
+    function addMsg(role, text, modelTag) {
+      const el = document.createElement('div');
+      el.className = 'msg ' + role;
+      const roleLabel = document.createElement('span');
+      roleLabel.className = 'role';
+      roleLabel.textContent = role === 'user' ? 'Tú' : (role === 'bot error' ? 'Error' : 'IA');
+      const body = document.createElement('span');
+      body.className = 'body';
+      body.textContent = text || '';
+      el.appendChild(roleLabel);
+      el.appendChild(body);
+      if (modelTag) {
+        const tag = document.createElement('span');
+        tag.className = 'model-tag';
+        tag.textContent = modelTag;
+        el.appendChild(tag);
+      }
+      chat.appendChild(el);
+      chat.scrollTop = chat.scrollHeight;
+      return body;
+    }
+
+    function lastBotEl() {
+      const msgs = chat.querySelectorAll('.msg.bot');
+      return msgs[msgs.length - 1];
+    }
+
+    async function loadModels() {
+      try {
+        const res = await fetch('/api/models');
+        const data = await res.json();
+        const box = document.getElementById('models');
+        box.innerHTML = '';
+        const models = data.models || [];
+        if (models.length === 0) {
+          box.innerHTML = '<div class="empty">Sin modelos gratuitos ahora.</div>';
+        } else {
+          const chinos = models.filter(m => m.is_chinese);
+          const resto = models.filter(m => !m.is_chinese);
+          if (chinos.length) {
+            const h = document.createElement('div');
+            h.className = 'group-title';
+            h.textContent = 'Chinos · ' + chinos.length;
+            box.appendChild(h);
+            chinos.forEach(m => box.appendChild(modelCard(m)));
+            box.appendChild(document.createElement('hr'));
+          }
+          if (resto.length) {
+            const h = document.createElement('div');
+            h.className = 'group-title';
+            h.textContent = 'Otros · ' + resto.length;
+            box.appendChild(h);
+            resto.forEach(m => box.appendChild(modelCard(m)));
+          }
+        }
+        conn.textContent = models.length + ' free';
+        conn.className = 'pill ok';
+      } catch (e) {
+        conn.textContent = 'offline';
+        conn.className = 'pill';
+      }
+    }
+
+    function modelCard(m) {
+      const el = document.createElement('div');
+      const isActive = m.id === activeModel;
+      el.className = 'model' + (isActive ? ' active' : '');
+      const statusLabel = { active: 'activo', backoff: 'cooldown', failed: 'fallo' }[m.status] || m.status;
+      el.innerHTML =
+        '<span class="status st-' + m.status + '"></span>' +
+        '<span class="name">' + escapeHtml(m.name) + '</span>' +
+        '<div class="meta">' + escapeHtml(m.id) + ' · ' + statusLabel + (isActive ? ' · EN USO' : '') + '</div>';
+      return el;
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    async function send() {
+      const text = promptEl.value.trim();
+      if (!text || sendBtn.disabled) return;
+      promptEl.value = '';
+      addMsg('user', text);
+      sendBtn.disabled = true;
+      const typing = addMsg('bot', 'Pensando...');
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, history: history, api_key: getApiKey() })
+        });
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let currentMsg = null;
+        let currentModel = '';
+
+        const typingRoot = typing.parentNode;
+        if (typingRoot) typingRoot.remove();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const events = buffer.split('\n\n');
+          buffer = events.pop();
+          for (const ev of events) {
+            const eventLine = ev.split('\n').find(l => l.startsWith('event:'));
+            const dataLine = ev.split('\n').find(l => l.startsWith('data:'));
+            if (!dataLine) continue;
+            const event = eventLine ? eventLine.slice(7).trim() : 'message';
+            const data = JSON.parse(dataLine.slice(5).trim());
+            if (event === 'status' && data.state === 'streaming') {
+              currentModel = data.model || '';
+              activeModel = currentModel;
+              currentMsg = addMsg('bot', '', 'modelo: ' + currentModel);
+            } else if (event === 'chunk') {
+              if (!currentMsg) currentMsg = addMsg('bot', '', 'modelo: ' + currentModel);
+              currentMsg.textContent += data.content;
+              chat.scrollTop = chat.scrollHeight;
+            } else if (event === 'done') {
+              activeModel = currentModel || activeModel;
+              history = history.concat([{role:'user',content:text}, {role:'assistant',content:currentMsg ? currentMsg.textContent : ''}]);
+              history = history.slice(-30);
+            } else if (event === 'error') {
+              addMsg('bot error', data.message || 'Error desconocido');
+            }
+          }
+        }
+      } catch (e) {
+        addMsg('bot error', 'No se pudo conectar con el servidor: ' + e.message);
+      } finally {
+        sendBtn.disabled = false;
+        promptEl.focus();
+      }
+    }
+
+    sendBtn.addEventListener('click', send);
+    promptEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+    });
+    promptEl.addEventListener('input', () => {
+      promptEl.style.height = 'auto';
+      promptEl.style.height = Math.min(promptEl.scrollHeight, 160) + 'px';
+    });
+
+    // === Gestión de la API key (campo desplegable/ocultable) ===
+    const KEY_STORAGE = 'megaFreeChat_apiKey';
+    const elToggle = document.getElementById('keyToggle');
+    const elDots = document.getElementById('keyDots');
+    const elInput = document.getElementById('keyInput');
+    const elSave = document.getElementById('keySave');
+
+    function getApiKey() {
+      return localStorage.getItem(KEY_STORAGE) || '';
+    }
+    function setApiKey(k) {
+      localStorage.setItem(KEY_STORAGE, k);
+      updateKeyUI();
+    }
+    function updateKeyUI() {
+      const has = !!getApiKey();
+      elToggle.classList.toggle('has-key', has);
+      elDots.style.display = has ? '' : 'none';
+      if (!has) {
+        elToggle.textContent = 'API key';
+      } else if (document.activeElement !== elInput) {
+        elToggle.textContent = 'API key configurada';
+      }
+    }
+
+    function openKeyField() {
+      elInput.style.display = '';
+      elSave.style.display = '';
+      elDots.style.display = 'none';
+      elInput.value = '';
+      elInput.focus();
+    }
+    function closeKeyField() {
+      elInput.style.display = 'none';
+      elSave.style.display = 'none';
+      elInput.value = '';
+      updateKeyUI();
+    }
+    function saveKey() {
+      const k = elInput.value.trim();
+      if (k) setApiKey(k);
+      closeKeyField();
+    }
+
+    elToggle.addEventListener('click', () => {
+      if (elInput.style.display === 'none' || !elInput.style.display) {
+        openKeyField();
+      } else {
+        closeKeyField();
+      }
+    });
+    elSave.addEventListener('click', saveKey);
+    elInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); saveKey(); }
+      if (e.key === 'Escape') closeKeyField();
+    });
+
+    // Ajustar el estado del botón al reabrir el campo
+    elInput.addEventListener('focus', () => { elToggle.textContent = 'API key'; });
+    elInput.addEventListener('blur', updateKeyUI);
+
+    updateKeyUI();
+
+    loadModels();
+    setInterval(loadModels, 20000);
+  </script>
+</body>
+</html>
