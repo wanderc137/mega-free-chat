@@ -1,24 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Chat gratis, sin modelo fijo. · Mega Free Chat</title>
-<meta name="description" content="Chat web con FastAPI y SSE que rota modelos gratuitos de OpenRouter, prioriza modelos chinos y sobrevive a los errores 429.">
-<meta name="author" content="wanderc137">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chat gratis, sin modelo fijo. · Mega Free Chat">
-<meta property="og:description" content="Chat web con FastAPI y SSE que rota modelos gratuitos de OpenRouter, prioriza modelos chinos y sobrevive a los errores 429.">
-<meta property="og:url" content="https://wanderc137.github.io/mega-free-chat/">
-<meta property="og:image" content="https://wanderc137.github.io/mega-free-chat/assets/og.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Chat gratis, sin modelo fijo. · Mega Free Chat">
-<meta name="twitter:description" content="Chat web con FastAPI y SSE que rota modelos gratuitos de OpenRouter, prioriza modelos chinos y sobrevive a los errores 429.">
-<meta name="twitter:image" content="https://wanderc137.github.io/mega-free-chat/assets/og.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2305070c'/><rect x='22' y='22' width='56' height='56' rx='12' fill='none' stroke='%234F8CFF' stroke-width='7'/><circle cx='50' cy='50' r='9' fill='%234F8CFF'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<meta content="Chat web con FastAPI y SSE que rota modelos gratuitos de OpenRouter, prioriza modelos chinos y sobrevive a los errores 429." name="description"/>
+<meta content="wanderc137" name="author"/>
+<meta content="website" property="og:type"/>
+<meta content="Chat gratis, sin modelo fijo. · Mega Free Chat" property="og:title"/>
+<meta content="Chat web con FastAPI y SSE que rota modelos gratuitos de OpenRouter, prioriza modelos chinos y sobrevive a los errores 429." property="og:description"/>
+<meta content="https://wanderc137.github.io/mega-free-chat/" property="og:url"/>
+<meta content="https://wanderc137.github.io/mega-free-chat/assets/og.png" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Chat gratis, sin modelo fijo. · Mega Free Chat" name="twitter:title"/>
+<meta content="Chat web con FastAPI y SSE que rota modelos gratuitos de OpenRouter, prioriza modelos chinos y sobrevive a los errores 429." name="twitter:description"/>
+<meta content="https://wanderc137.github.io/mega-free-chat/assets/og.png" name="twitter:image"/>
+<link href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;rect width='100' height='100' rx='22' fill='%2305070c'/&gt;&lt;rect x='22' y='22' width='56' height='56' rx='12' fill='none' stroke='%234F8CFF' stroke-width='7'/&gt;&lt;circle cx='50' cy='50' r='9' fill='%234F8CFF'/&gt;&lt;/svg&gt;" rel="icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scrollbar-width:none}
@@ -257,182 +258,201 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
   .foot-grid{grid-template-columns:1fr}
   .section{padding:72px 0}
 }
+
+.fail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:6px}
+.fail{background:rgba(10,18,24,.55);border:1px solid var(--line);border-radius:14px;padding:18px}
+.fail .v{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.fail h3{font-size:16px;margin:8px 0 6px}
+.fail p{font-size:14px;margin:0;color:var(--muted)}
+.rating-head{display:flex;align-items:center;gap:20px;margin:6px 0 18px;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:rgba(10,18,24,.5)}
+.rating-avg{font-family:var(--mono);font-size:40px;line-height:1;color:var(--accent)}
+.rating-avg small{font-size:14px;color:var(--muted)}
+.rating-head p{margin:4px 0 0;font-size:14px;color:var(--muted);max-width:70ch}
+.rating{display:grid;gap:2px}
+.rating-row{display:grid;grid-template-columns:165px minmax(90px,1fr) 48px;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.rating-row:last-child{border-bottom:0}
+.rating-name{font-size:13.5px;color:var(--text)}
+.rating-bar{height:6px;border-radius:99px;background:rgba(148,190,200,.14);overflow:hidden}
+.rating-bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.rating-score{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right}
+.rating-note{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin:-4px 0 8px}
+.faq{display:grid;gap:10px;margin-top:4px}
+.faq details{border:1px solid var(--line);border-radius:14px;padding:14px 18px;background:rgba(10,18,24,.4)}
+.faq summary{cursor:pointer;font-weight:600;font-size:14.5px;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";float:right;color:var(--accent);font-family:var(--mono)}
+.faq details[open] summary::after{content:"−"}
+.faq p{margin:10px 0 0;font-size:14px;color:var(--muted);line-height:1.7}
+.concept-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:26px;align-items:start}
+.concept-grid p{font-size:15.5px;color:var(--muted);line-height:1.8;margin:0 0 14px}
+.concept-side{border-left:1px solid var(--line);padding-left:22px}
+.concept-side .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.concept-side p{font-size:13px;margin:6px 0 16px}
+@media(max-width:760px){.concept-grid,.fail-grid{grid-template-columns:1fr}.concept-side{border-left:0;padding-left:0}}
+
 </style>
-<link rel="stylesheet" href="assets/community.css?v=5"></head>
+<link href="assets/community.css?v=5" rel="stylesheet"/></head>
 <body style="--accent:#4F8CFF;--accent2:#0F1115">
 <div class="grid-overlay"></div>
 <div class="glow one"></div>
 <div class="glow two"></div>
-
 <header class="nav">
-  <div class="wrap nav-inner">
-    <a class="brand" href="#top">
-      <span class="brand-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/><circle cx="12" cy="12" r="2.5"/></svg></span>
-      <span>Mega Free Chat<small>Portfolio · IA &amp; APIs</small></span>
-    </a>
-    <nav class="nav-links" aria-label="Navegación">
-      <a href="#problema">Visión</a>
-      <a href="#como">Cómo funciona</a>
-      <a href="#arquitectura">Arquitectura</a>
-      <a href="#docs">Documentación</a>
-      <a href="#comunidad">Comunidad</a>
-      <a class="btn btn-ghost" style="padding:9px 15px" href="https://github.com/wanderc137/mega-free-chat" target="_blank" rel="noopener">GitHub</a>
-    </nav>
-  </div>
+<div class="wrap nav-inner">
+<a class="brand" href="#top">
+<span class="brand-mark"><svg viewbox="0 0 24 24"><rect height="14" rx="3" width="14" x="5" y="5"></rect><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path><circle cx="12" cy="12" r="2.5"></circle></svg></span>
+<span>Mega Free Chat<small>Portfolio · IA &amp; APIs</small></span>
+</a>
+<nav aria-label="Navegación" class="nav-links">
+<a href="#problema">Visión</a>
+<a href="#como">Cómo funciona</a>
+<a href="#arquitectura">Arquitectura</a>
+<a href="#docs">Documentación</a>
+<a href="#comunidad">Comunidad</a>
+<a class="btn btn-ghost" href="https://github.com/wanderc137/mega-free-chat" rel="noopener" style="padding:9px 15px" target="_blank">GitHub</a>
+</nav>
+</div>
 </header>
-
 <main id="top">
 <section class="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <div class="eyebrow">IA · SSE · OPENROUTER</div>
-      <h1>Chat gratis,<br><span class='grad'>sin modelo fijo.</span></h1>
-      <p class="lead">Un chat, muchos modelos gratis, un solo endpoint. La pasarela descubre modelos OpenRouter a $0 y envía cada mensaje al primero que responda, con failover y streaming SSE.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="https://github.com/wanderc137/mega-free-chat" target="_blank" rel="noopener">Ver el repositorio <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-ghost" href="https://github.com/wanderc137/mega-free-chat#readme" target="_blank" rel="noopener">Leer la documentación</a>
-      </div>
-      <div class="hero-badges"><span class="badge">Python</span><span class="badge">FastAPI</span><span class="badge">SSE</span><span class="badge">OpenRouter</span><span class="badge">JavaScript</span><span class="badge">MIT</span></div>
-    </div>
-    <div class="hero-visual">
-      <div class="visual-frame"><img src="assets/architecture.svg" alt="Arquitectura de Mega Free Chat con SSE y pool de modelos"></div>
-      <div class="visual-caption">El navegador habla con la pasarela; la pasarela habla con OpenRouter.</div>
-      <div class="float-chip"><span class="live-dot"></span>SSE · streaming</div>
-    </div>
-  </div>
+<div class="wrap hero-grid">
+<div class="hero-copy">
+<div class="eyebrow">IA · SSE · OPENROUTER</div>
+<h1>Chat gratis,<br/><span class="grad">sin modelo fijo.</span></h1>
+<p class="lead">Un chat, muchos modelos gratis, un solo endpoint. La pasarela descubre modelos OpenRouter a $0 y envía cada mensaje al primero que responda, con failover y streaming SSE.</p>
+<div class="hero-actions">
+<a class="btn btn-primary" href="https://github.com/wanderc137/mega-free-chat" rel="noopener" target="_blank">Ver el repositorio <svg viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+<a class="btn btn-ghost" href="https://github.com/wanderc137/mega-free-chat#readme" rel="noopener" target="_blank">Leer la documentación</a>
+</div>
+<div class="hero-badges"><span class="badge">Python</span><span class="badge">FastAPI</span><span class="badge">SSE</span><span class="badge">OpenRouter</span><span class="badge">JavaScript</span><span class="badge">MIT</span></div>
+</div>
+<div class="hero-visual">
+<div class="visual-frame"><img alt="Arquitectura de Mega Free Chat con SSE y pool de modelos" src="assets/architecture.svg"/></div>
+<div class="visual-caption">El navegador habla con la pasarela; la pasarela habla con OpenRouter.</div>
+<div class="float-chip"><span class="live-dot"></span>SSE · streaming</div>
+</div>
+</div>
 </section>
-
-<section class="stats"><div class="wrap stats-grid"><div class="stat"><div class="stat-value">1</div><div class="stat-label">API key</div></div><div class="stat"><div class="stat-value">$0</div><div class="stat-label">coste por token</div></div><div class="stat"><div class="stat-value">3</div><div class="stat-label">endpoints</div></div><div class="stat"><div class="stat-value">6 h</div><div class="stat-label">refresco del pool</div></div></div></section>
-
+<section class="stats"><div class="wrap stats-grid"><div class="stat"><div class="stat-value">1</div><div class="stat-label">API key</div></div><div class="stat"><div class="stat-value">$0</div><div class="stat-label">coste por token</div></div><div class="stat"><div class="stat-value">3</div><div class="stat-label">endpoints</div></div><div class="stat"><div class="stat-value">6 h</div><div class="stat-label">refresco del pool</div></div></div></section><section class="section" id="concepto"><div class="wrap"><div class="section-head"><div class="kicker">El concepto</div><h2>Qué es y por qué existe</h2><p class="section-sub">El problema, el enfoque y el alcance real del proyecto.</p></div><div class="concept-grid"><div><p>Mega Free Chat es una aplicación web local que descubre en ejecución los modelos con precio $0 del catálogo de OpenRouter, los mantiene en un pool en memoria y envía cada pregunta al primero que acepte la petición, con prioridad a proveedores chinos y failover por modelo. Expone una UI de terminal, tres endpoints (/api/models, /api/chat y /) y streaming SSE. Está pensada para una persona en una máquina de confianza que quiera probar modelos gratuitos sin editar listas.</p><p>El interés está en la política: filtro literal de pricing == "0", clasificación china con regex ancladas, cooldown doble para 429 y estado por modelo en lugar de global. No es multiinquilino, no mide calidad ni latencia, no guarda historial y no sustituye un modelo pago en silencio: si el pool queda vacío, devuelve un error explícito. Depende de que OpenRouter mantenga modelos gratuitos, condición que puede cambiar.</p></div><div class="concept-side"><div class="k">Cómo leer esta ficha</div><p>Los tropiezos salen de la bitácora y de las versiones tempranas. La evaluación usa seis criterios fijos, de 1 a 5, y no premia la espectacularidad: premia que el proyecto se pueda reproducir y entender.</p></div></div></div></section>
 <section class="section" id="problema">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="kicker">01 — La idea</div>
-      <h2>Un chat que no se cae cuando un modelo se cae</h2>
-      <p class="section-sub">La gracia no es el chat: es la capa que elige, rota y mantiene la conversación viva cuando el proveedor gratuito falla.</p>
-    </div>
-    <div class="split">
-      <div class="card reveal"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5M12 17v.01"/></svg></div><h3>El problema</h3><p>Los modelos gratuitos de OpenRouter son excelentes hasta que desaparecen: 429, timeouts, modelos que dejan de estar disponibles. Un chat que depende de uno solo se rompe en la primera demo.</p></div>
-      <div class="card reveal"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/></svg></div><h3>La solución</h3><p>Un pool con prioridad china, failover automático y streaming SSE. Si el modelo activo falla, la pasarela elige otro y continúa la respuesta sin que el usuario recargue la página.</p></div>
-    </div>
-  </div>
+<div class="wrap">
+<div class="section-head reveal">
+<div class="kicker">01 — La idea</div>
+<h2>Un chat que no se cae cuando un modelo se cae</h2>
+<p class="section-sub">La gracia no es el chat: es la capa que elige, rota y mantiene la conversación viva cuando el proveedor gratuito falla.</p>
+</div>
+<div class="split">
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3Z"></path><path d="M12 9v5M12 17v.01"></path></svg></div><h3>El problema</h3><p>Los modelos gratuitos de OpenRouter son excelentes hasta que desaparecen: 429, timeouts, modelos que dejan de estar disponibles. Un chat que depende de uno solo se rompe en la primera demo.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="12" rx="2" width="12" x="6" y="6"></rect><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"></path><rect height="5" rx="1" width="5" x="9.5" y="9.5"></rect></svg></div><h3>La solución</h3><p>Un pool con prioridad china, failover automático y streaming SSE. Si el modelo activo falla, la pasarela elige otro y continúa la respuesta sin que el usuario recargue la página.</p></div>
+</div>
+</div>
 </section>
-
 <section class="section tight" id="como">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="kicker">02 — El recorrido</div>
-      <h2>Cómo funciona, paso a paso</h2>
-      <p class="section-sub">El usuario escribe; la pasarela decide quién responde.</p>
-    </div>
-    <div class="timeline reveal"><div class="step"><div class="step-num">01</div><div class="step-body"><h3>El navegador envía</h3><p>La UI manda el historial al backend por HTTP y abre un stream SSE para la respuesta.</p></div></div><div class="step"><div class="step-num">02</div><div class="step-body"><h3>El pool elige</h3><p>El backend consulta el catálogo de modelos gratuitos y prioriza los modelos chinos disponibles.</p></div></div><div class="step"><div class="step-num">03</div><div class="step-body"><h3>La respuesta fluye</h3><p>Los tokens llegan por SSE y se pintan en la burbuja sin esperar al final.</p></div></div><div class="step"><div class="step-num">04</div><div class="step-body"><h3>Si falla, rota</h3><p>Un error 429 o un timeout cambia el modelo y reintenta. El usuario ve una respuesta, no un stack trace.</p></div></div></div>
-  </div>
+<div class="wrap">
+<div class="section-head reveal">
+<div class="kicker">02 — El recorrido</div>
+<h2>Cómo funciona, paso a paso</h2>
+<p class="section-sub">El usuario escribe; la pasarela decide quién responde.</p>
+</div>
+<div class="timeline reveal"><div class="step"><div class="step-num">01</div><div class="step-body"><h3>El navegador envía</h3><p>La UI manda el historial al backend por HTTP y abre un stream SSE para la respuesta.</p></div></div><div class="step"><div class="step-num">02</div><div class="step-body"><h3>El pool elige</h3><p>El backend consulta el catálogo de modelos gratuitos y prioriza los modelos chinos disponibles.</p></div></div><div class="step"><div class="step-num">03</div><div class="step-body"><h3>La respuesta fluye</h3><p>Los tokens llegan por SSE y se pintan en la burbuja sin esperar al final.</p></div></div><div class="step"><div class="step-num">04</div><div class="step-body"><h3>Si falla, rota</h3><p>Un error 429 o un timeout cambia el modelo y reintenta. El usuario ve una respuesta, no un stack trace.</p></div></div></div>
+</div>
 </section>
-
 <section class="section tight" id="arquitectura">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="kicker">03 — Bajo el capó</div>
-      <h2>La pasarela es el producto</h2>
-      <p class="section-sub">El frontend es simple a propósito; la inteligencia de selección vive en el backend.</p>
-    </div>
-    <figure class="figure reveal"><img src="assets/architecture.svg" alt="Arquitectura de Mega Free Chat con SSE y pool de modelos" loading="lazy"><figcaption>El navegador habla con la pasarela; la pasarela habla con OpenRouter.</figcaption></figure>
-    <div class="arch-points reveal"><div class="card"><h4>Streaming SSE</h4><p>La respuesta se muestra mientras se genera, con eventos claros y reconexión.</p></div><div class="card"><h4>Prioridad china</h4><p>El pool ordena modelos chinos gratuitos primero, pero conserva alternativas globales.</p></div><div class="card"><h4>Failover visible</h4><p>Los errores se registran y se convierten en una nueva elección de modelo, no en una pantalla rota.</p></div></div>
-  </div>
+<div class="wrap">
+<div class="section-head reveal">
+<div class="kicker">03 — Bajo el capó</div>
+<h2>La pasarela es el producto</h2>
+<p class="section-sub">El frontend es simple a propósito; la inteligencia de selección vive en el backend.</p>
+</div>
+<figure class="figure reveal"><img alt="Arquitectura de Mega Free Chat con SSE y pool de modelos" loading="lazy" src="assets/architecture.svg"/><figcaption>El navegador habla con la pasarela; la pasarela habla con OpenRouter.</figcaption></figure>
+<div class="arch-points reveal"><div class="card"><h4>Streaming SSE</h4><p>La respuesta se muestra mientras se genera, con eventos claros y reconexión.</p></div><div class="card"><h4>Prioridad china</h4><p>El pool ordena modelos chinos gratuitos primero, pero conserva alternativas globales.</p></div><div class="card"><h4>Failover visible</h4><p>Los errores se registran y se convierten en una nueva elección de modelo, no en una pantalla rota.</p></div></div>
+</div>
 </section>
-
 <section class="section tight">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="kicker">04 — Lo que lo hace distinto</div>
-      <h2>Decisiones de ingeniería</h2>
-      <p class="section-sub">Menos dependencia de un proveedor, más conversación.</p>
-    </div>
-    <div class="features reveal"><div class="feature"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><h3>Rotación de modelos</h3><p>Si un modelo falla, el siguiente toma la conversación.</p></div><div class="feature"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h3l2-7 4 14 3-9 2 4h6"/></svg></div><h3>Streaming SSE</h3><p>Tokens en vivo sin polling ni WebSocket.</p></div><div class="feature"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg></div><h3>Clave en el servidor</h3><p>La API key vive en .env; el navegador nunca la ve.</p></div><div class="feature"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8M12 17v4"/></svg></div><h3>UI de chat</h3><p>Historial, burbujas y estado de conexión en una interfaz liviana.</p></div><div class="feature"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 14 4-4"/><circle cx="12" cy="14" r="1.5"/></svg></div><h3>Cooldown</h3><p>Los modelos saturados se apartan temporalmente.</p></div><div class="feature"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6.2 9 4.5 4.5 0 0 0 7 19h10.5Z"/><path d="m9 14 6 6M15 14l-6 6"/></svg></div><h3>Modelos $0</h3><p>El pool se alimenta del catálogo gratuito de OpenRouter.</p></div></div>
-  </div>
+<div class="wrap">
+<div class="section-head reveal">
+<div class="kicker">04 — Lo que lo hace distinto</div>
+<h2>Decisiones de ingeniería</h2>
+<p class="section-sub">Menos dependencia de un proveedor, más conversación.</p>
+</div>
+<div class="features reveal"><div class="feature"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M17 2l4 4-4 4"></path><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><path d="M7 22l-4-4 4-4"></path><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg></div><h3>Rotación de modelos</h3><p>Si un modelo falla, el siguiente toma la conversación.</p></div><div class="feature"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M2 12h3l2-7 4 14 3-9 2 4h6"></path></svg></div><h3>Streaming SSE</h3><p>Tokens en vivo sin polling ni WebSocket.</p></div><div class="feature"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z"></path><path d="m9 12 2 2 4-4"></path></svg></div><h3>Clave en el servidor</h3><p>La API key vive en .env; el navegador nunca la ve.</p></div><div class="feature"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="3"></rect><path d="M3 8h18M8 21h8M12 17v4"></path></svg></div><h3>UI de chat</h3><p>Historial, burbujas y estado de conexión en una interfaz liviana.</p></div><div class="feature"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 18a8 8 0 1 1 16 0"></path><path d="m12 14 4-4"></path><circle cx="12" cy="14" r="1.5"></circle></svg></div><h3>Cooldown</h3><p>Los modelos saturados se apartan temporalmente.</p></div><div class="feature"><div class="icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6.2 9 4.5 4.5 0 0 0 7 19h10.5Z"></path><path d="m9 14 6 6M15 14l-6 6"></path></svg></div><h3>Modelos $0</h3><p>El pool se alimenta del catálogo gratuito de OpenRouter.</p></div></div>
+</div>
 </section>
-
-<section class="section tight"><div class="wrap"><div class="section-head reveal"><div class="kicker">05 — Diagramas</div><h2>El sistema, en dibujos</h2><p class="section-sub">Los diagramas se mantienen en el repositorio y se actualizan con el código.</p></div><div class="gallery"><figure class="figure"><img src="assets/chat-flow.svg" alt="Mega Free Chat — chat flow" loading="lazy"><figcaption>Chat Flow</figcaption></figure><figure class="figure"><img src="assets/failover.svg" alt="Mega Free Chat — failover" loading="lazy"><figcaption>Failover</figcaption></figure></div></div></section>
-
+<section class="section tight"><div class="wrap"><div class="section-head reveal"><div class="kicker">05 — Diagramas</div><h2>El sistema, en dibujos</h2><p class="section-sub">Los diagramas se mantienen en el repositorio y se actualizan con el código.</p></div><div class="gallery"><figure class="figure"><img alt="Mega Free Chat — chat flow" loading="lazy" src="assets/chat-flow.svg"/><figcaption>Chat Flow</figcaption></figure><figure class="figure"><img alt="Mega Free Chat — failover" loading="lazy" src="assets/failover.svg"/><figcaption>Failover</figcaption></figure></div></div></section>
 <section class="section tight">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="kicker">06 — Stack y arranque</div>
-      <h2>Con qué está construido</h2>
-      <p class="section-sub">FastAPI para la pasarela, SSE para el streaming y JavaScript vanilla para la UI. Sin framework de frontend que mantener.</p>
-    </div>
-    <div class="stack-grid">
-      <div class="reveal">
-        <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">SSE</span><span class="chip">OpenRouter</span><span class="chip">JavaScript</span><span class="chip">HTML/CSS</span></div>
-        <div class="note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg><span>La API key se configura por entorno o se guarda en el navegador según el modo de uso.</span></div>
-      </div>
-      <div class="terminal reveal">
-        <div class="terminal-bar"><i></i><i></i><i></i><span>mega-free-chat · arranque</span></div>
-        <pre><span class="p">$</span> python3 -m venv .venv
+<div class="wrap">
+<div class="section-head reveal">
+<div class="kicker">06 — Stack y arranque</div>
+<h2>Con qué está construido</h2>
+<p class="section-sub">FastAPI para la pasarela, SSE para el streaming y JavaScript vanilla para la UI. Sin framework de frontend que mantener.</p>
+</div>
+<div class="stack-grid">
+<div class="reveal">
+<div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">SSE</span><span class="chip">OpenRouter</span><span class="chip">JavaScript</span><span class="chip">HTML/CSS</span></div>
+<div class="note"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z"></path><path d="m9 12 2 2 4-4"></path></svg><span>La API key se configura por entorno o se guarda en el navegador según el modo de uso.</span></div>
+</div>
+<div class="terminal reveal">
+<div class="terminal-bar"><i></i><i></i><i></i><span>mega-free-chat · arranque</span></div>
+<pre><span class="p">$</span> python3 -m venv .venv
 <span class="p">$</span> source .venv/bin/activate
 <span class="p">$</span> pip install -r requirements.txt
 <span class="p">$</span> export OPENROUTER_API_KEY=sk-or-...
 <span class="p">$</span> uvicorn app:app --port 8000</pre>
-      </div>
-    </div>
-  </div>
+</div>
+</div>
+</div>
 </section>
-
 <section class="section tight" id="docs">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="kicker">07 — Documentación</div>
-      <h2>Todo está escrito</h2>
-      <p class="section-sub">Cada decisión, cada límite y cada comando están documentados en el repositorio. Sin folletos: lo que funciona se muestra, lo que no, también.</p>
-    </div>
-    <div class="docs-grid reveal"><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/README.md" target="_blank" rel="noopener"><span class="tag">README</span><h3>La guía completa</h3><p>Arquitectura, pool, SSE, configuración y límites.</p><span class="arrow">Abrir documento <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/datasheet.md" target="_blank" rel="noopener"><span class="tag">DATASHEET</span><h3>Manual de operación</h3><p>Endpoints, variables, uso y diagnóstico.</p><span class="arrow">Abrir documento <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/developer.md" target="_blank" rel="noopener"><span class="tag">DEVELOPER</span><h3>Guía de código</h3><p>Backend, frontend, streaming y extensión.</p><span class="arrow">Abrir documento <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/REFERENCES.md" target="_blank" rel="noopener"><span class="tag">REFERENCES</span><h3>Referencias</h3><p>OpenRouter, FastAPI y SSE.</p><span class="arrow">Abrir documento <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
-  </div>
+<div class="wrap">
+<div class="section-head reveal">
+<div class="kicker">07 — Documentación</div>
+<h2>Todo está escrito</h2>
+<p class="section-sub">Cada decisión, cada límite y cada comando están documentados en el repositorio. Sin folletos: lo que funciona se muestra, lo que no, también.</p>
+</div>
+<div class="docs-grid reveal"><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/README.md" rel="noopener" target="_blank"><span class="tag">README</span><h3>La guía completa</h3><p>Arquitectura, pool, SSE, configuración y límites.</p><span class="arrow">Abrir documento <svg viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/datasheet.md" rel="noopener" target="_blank"><span class="tag">DATASHEET</span><h3>Manual de operación</h3><p>Endpoints, variables, uso y diagnóstico.</p><span class="arrow">Abrir documento <svg viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/developer.md" rel="noopener" target="_blank"><span class="tag">DEVELOPER</span><h3>Guía de código</h3><p>Backend, frontend, streaming y extensión.</p><span class="arrow">Abrir documento <svg viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a><a class="doc-card" href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/REFERENCES.md" rel="noopener" target="_blank"><span class="tag">REFERENCES</span><h3>Referencias</h3><p>OpenRouter, FastAPI y SSE.</p><span class="arrow">Abrir documento <svg viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a></div>
+</div>
 </section>
-
-<section class="cta">
-  <div class="wrap">
-    <div class="cta-card reveal">
-      <div class="kicker" style="justify-content:center">Portfolio · 21 proyectos</div>
-      <h2>¿Te animás?</h2>
-      <p>Usá esto como base y referencia para montar un chat multi-modelo con SSE y modelos gratuitos, sin atarte a un proveedor. Este proyecto es la prueba de que se puede hacer con componentes reales.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="https://wanderc137.github.io/" target="_blank" rel="noopener">Ver todos los proyectos <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-ghost" href="https://github.com/wanderc137/mega-free-chat" target="_blank" rel="noopener">Explorar el código</a>
-      </div>
-    </div>
-  </div>
+<section class="section tight"><div class="wrap"><div class="section-head"><div class="kicker">Tropiezos</div><h2>Los tropiezos, documentados</h2><p class="section-sub">Lo que no funcionó en las primeras versiones, con la corrección aplicada.</p></div><div class="fail-grid"><div class="fail"><div class="v">commits 2–3 · alcance</div><h3>Firmware ESP8266 dentro del repositorio web</h3><p>El segundo commit añadió una API para microcontroladores y el firmware del ESP8266, lo que obligaba a clonar un dispositivo para leer el backend. Se separó en proxy-openrouter-ia-chinas con un commit propio el mismo día, antes de que el alcance creciera.</p></div><div class="fail"><div class="v">v1.0 · failover</div><h3>El failover no cubre el primer intento</h3><p>chat_stream es un generador: llamarlo no ejecuta la petición, así que los except del router nunca ven el 429 del primer modelo. Se descubrió escribiendo la documentación y no en ejecución; quedó sin corregir como deuda prioritaria, con dos fixes descritos.</p></div><div class="fail"><div class="v">v1.0 · configuración</div><h3>load_dotenv() llega tarde</h3><p>Los módulos leen os.getenv al importarse y el .env se carga después; con uvicorn server:app se ignoran BACKOFF_SECONDS, POOL_REFRESH_SECONDS y OR_BASE_URL. Se documentó en README, datasheet y developer, pero el cambio a lectura en runtime no está aplicado.</p></div><div class="fail"><div class="v">2026-08-28 · clasificación</div><h3>Falsos positivos de modelos chinos</h3><p>La keyword "ling" (Ling/InclusionAI) coincidía dentro de "inkling", así que modelos occidentales aparecían como chinos en el panel. Las keywords se convirtieron en expresiones regulares con límite de palabra.</p></div></div></div></section><section class="section tight"><div class="wrap"><div class="section-head"><div class="kicker">Evaluación</div><h2>Cómo se mide este proyecto</h2><p class="section-sub">Seis criterios fijos, con la evidencia que respalda cada nota.</p></div><div class="rating-head"><div class="rating-avg">4.0<small>/5</small></div><p>Útil para quien quiera entender un router de modelos con failover y streaming sin montar infraestructura. Pesa más que el failover no cubra errores del primer intento y que el estado viva solo en RAM.</p></div><div class="rating"><div class="rating-row"><div class="rating-name">Madurez</div><div class="rating-bar"><span style="width:60%"></span></div><div class="rating-score">3/5</div><div class="rating-note">Verificado GET /, GET /api/models (18 modelos gratuitos el 2026-08-28) y POST /api/chat con stream SSE completo; sin tests automatizados ni CI y con el failover incompleto.</div></div><div class="rating-row"><div class="rating-name">Reproducibilidad</div><div class="rating-bar"><span style="width:60%"></span></div><div class="rating-score">3/5</div><div class="rating-note">run.sh crea .venv e instala requirements sin versiones fijadas; el README declara Python 3.10+ aunque la venv de referencia es 3.12.</div></div><div class="rating-row"><div class="rating-name">Documentación</div><div class="rating-bar"><span style="width:100%"></span></div><div class="rating-score">5/5</div><div class="rating-note">README de 40 KB, datasheet de 28 KB, developer de 42 KB, bitácora con nueve problemas y estado de verificación separado en verificado y no verificado.</div></div><div class="rating-row"><div class="rating-name">Honestidad de límites</div><div class="rating-bar"><span style="width:100%"></span></div><div class="rating-score">5/5</div><div class="rating-note">Declara que "gratis" es transitorio, que no midió latencias y que el failover no se ejercitó con un 429 real; enumera siete áreas no verificadas.</div></div><div class="rating-row"><div class="rating-name">Valor demostrativo</div><div class="rating-bar"><span style="width:80%"></span></div><div class="rating-score">4/5</div><div class="rating-note">Cuatro capas separadas (server, pool, cliente, router), SSE consumido con fetch y ReadableStream, y cooldown de 300 s duplicado a 600 s para 429.</div></div><div class="rating-row"><div class="rating-name">Facilidad de despliegue</div><div class="rating-bar"><span style="width:80%"></span></div><div class="rating-score">4/5</div><div class="rating-note">Un venv, cuatro dependencias y run.sh en primer plano en el puerto 8000; requiere API key sk-or-v1 y salida HTTPS a openrouter.ai.</div></div></div></div></section><section class="section tight"><div class="wrap"><div class="section-head"><div class="kicker">Preguntas</div><h2>Lo que suelen preguntar</h2></div><div class="faq"><details><summary>¿Qué es Mega Free Chat?</summary><p>Una pasarela web local que consulta el catálogo de OpenRouter, filtra los modelos con precio $0 y enruta cada mensaje al primero disponible, entregando la respuesta por SSE.</p></details><details><summary>¿Garantiza IA gratuita?</summary><p>No. Se apoya en promociones del catálogo de OpenRouter; si no queda ningún modelo en $0, la app responde con un error explícito en lugar de usar un modelo pago.</p></details><details><summary>¿Cómo se ejecuta?</summary><p>Con python3 -m venv, pip install -r requirements.txt y run.sh o uvicorn; hay que definir OPENROUTER_API_KEY en .env y abrir localhost:8000.</p></details><details><summary>¿Qué se puede reutilizar?</summary><p>El pool dinámico con cooldown por modelo, la clasificación por proveedor y keyword, y el contrato SSE con eventos status, chunk, done y error.</p></details></div></div></section><section class="cta">
+<div class="wrap">
+<div class="cta-card reveal">
+<div class="kicker" style="justify-content:center">Portfolio · 21 proyectos</div>
+<h2>¿Te animás?</h2>
+<p>Usá esto como base y referencia para montar un chat multi-modelo con SSE y modelos gratuitos, sin atarte a un proveedor. Este proyecto es la prueba de que se puede hacer con componentes reales.</p>
+<div class="hero-actions">
+<a class="btn btn-primary" href="https://wanderc137.github.io/" rel="noopener" target="_blank">Ver todos los proyectos <svg viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+<a class="btn btn-ghost" href="https://github.com/wanderc137/mega-free-chat" rel="noopener" target="_blank">Explorar el código</a>
+</div>
+</div>
+</div>
 </section>
 </main>
-
 <footer>
-  <div class="wrap">
-    <div class="foot-grid">
-      <div>
-        <div class="foot-brand"><span class="brand-mark"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/><circle cx="12" cy="12" r="2.5"/></svg></span>Mega Free Chat</div>
-        <p class="foot-p">Un chat que cambia de modelo antes de romperse.</p>
-      </div>
-      <div>
-        <h4>Este proyecto</h4>
-        <div class="foot-links">
-          <a href="https://github.com/wanderc137/mega-free-chat" target="_blank" rel="noopener">Repositorio en GitHub</a>
-          <a href="https://github.com/wanderc137/mega-free-chat/blob/main/README.md" target="_blank" rel="noopener">README técnico</a>
-          <a href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/datasheet.md" target="_blank" rel="noopener">Datasheet</a>
-          <a href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/developer.md" target="_blank" rel="noopener">Guía de desarrollador</a>
-          <a href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/REFERENCES.md" target="_blank" rel="noopener">Referencias</a>
-        </div>
-      </div>
-      <div>
-        <h4>Otros proyectos</h4>
-        <div class="foot-links"><a href="https://wanderc137.github.io/proxy-openrouter-ia-chinas/">OpenRouter Proxy</a><a href="https://wanderc137.github.io/netEspNow-v1.4/">netEspNow</a><a href="https://wanderc137.github.io/nb2700-telemetria/">NB2700 Telemetría</a><a href="https://wanderc137.github.io/CubeCell-LoRaWAN-Node-v1.3/">CubeCell LoRaWAN Bridge v1.3</a><a href="https://wanderc137.github.io/CashDroController/">CashDro Controller</a><a href="https://wanderc137.github.io/BusAccel-8266-v4/">BusAccel</a><a href="https://wanderc137.github.io/SpeechToTextAuxPy/">SpeechToText Aux</a><a href="https://wanderc137.github.io/teleAsistenciaV1.3/">Alerta Mayor</a><a href="https://wanderc137.github.io/TotemAutoatencion/">Totem Autoatención</a><a href="https://wanderc137.github.io/turnero/">Turnero</a><a href="https://wanderc137.github.io/valvulas-zigbee/">Válvulas Zigbee</a><a href="https://wanderc137.github.io/mesacerca/">MesaCerca</a><a href="https://wanderc137.github.io/permaweb-app/">Permaweb App</a><a href="https://wanderc137.github.io/AnalizadorRostroUNOQ/">AnalizadorRostro v1</a></div>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span><a href="https://wanderc137.github.io/">Portfolio</a> · © 2026 wanderc137 · Licencia MIT</span>
-      <span>Diseñado y construido por wanderc137</span>
-    </div>
-  </div>
+<div class="wrap">
+<div class="foot-grid">
+<div>
+<div class="foot-brand"><span class="brand-mark"><svg viewbox="0 0 24 24"><rect height="14" rx="3" width="14" x="5" y="5"></rect><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path><circle cx="12" cy="12" r="2.5"></circle></svg></span>Mega Free Chat</div>
+<p class="foot-p">Un chat que cambia de modelo antes de romperse.</p>
+</div>
+<div>
+<h4>Este proyecto</h4>
+<div class="foot-links">
+<a href="https://github.com/wanderc137/mega-free-chat" rel="noopener" target="_blank">Repositorio en GitHub</a>
+<a href="https://github.com/wanderc137/mega-free-chat/blob/main/README.md" rel="noopener" target="_blank">README técnico</a>
+<a href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/datasheet.md" rel="noopener" target="_blank">Datasheet</a>
+<a href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/developer.md" rel="noopener" target="_blank">Guía de desarrollador</a>
+<a href="https://github.com/wanderc137/mega-free-chat/blob/main/docs/REFERENCES.md" rel="noopener" target="_blank">Referencias</a>
+</div>
+</div>
+<div>
+<h4>Otros proyectos</h4>
+<div class="foot-links"><a href="https://wanderc137.github.io/proxy-openrouter-ia-chinas/">OpenRouter Proxy</a><a href="https://wanderc137.github.io/netEspNow-v1.4/">netEspNow</a><a href="https://wanderc137.github.io/nb2700-telemetria/">NB2700 Telemetría</a><a href="https://wanderc137.github.io/CubeCell-LoRaWAN-Node-v1.3/">CubeCell LoRaWAN Bridge v1.3</a><a href="https://wanderc137.github.io/CashDroController/">CashDro Controller</a><a href="https://wanderc137.github.io/BusAccel-8266-v4/">BusAccel</a><a href="https://wanderc137.github.io/SpeechToTextAuxPy/">SpeechToText Aux</a><a href="https://wanderc137.github.io/teleAsistenciaV1.3/">Alerta Mayor</a><a href="https://wanderc137.github.io/TotemAutoatencion/">Totem Autoatención</a><a href="https://wanderc137.github.io/turnero/">Turnero</a><a href="https://wanderc137.github.io/valvulas-zigbee/">Válvulas Zigbee</a><a href="https://wanderc137.github.io/mesacerca/">MesaCerca</a><a href="https://wanderc137.github.io/permaweb-app/">Permaweb App</a><a href="https://wanderc137.github.io/AnalizadorRostroUNOQ/">AnalizadorRostro v1</a></div>
+</div>
+</div>
+<div class="foot-bottom">
+<span><a href="https://wanderc137.github.io/">Portfolio</a> · © 2026 wanderc137 · Licencia MIT</span>
+<span>Diseñado y construido por wanderc137</span>
+</div>
+</div>
 </footer>
-
 <script>
 (function(){
   var io = new IntersectionObserver(function(entries){
@@ -446,8 +466,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 })();
 </script>
-
 <script>window.PORTFOLIO_COMMUNITY = {"account": "wanderc137", "repo": "mega-free-chat", "coinNamespace": "wanderc137-mega-free-chat-coins-v1", "faqs": [{"q": "¿Qué es?", "a": "Una pasarela web de chat que descubre modelos gratuitos de OpenRouter y rota cuando uno falla."}, {"q": "¿Cómo funciona el streaming?", "a": "Usa <b>SSE</b>: el navegador recibe los tokens a medida que llegan, sin polling."}, {"q": "¿Dónde se guarda la API key?", "a": "En localStorage del navegador o en <code>.env</code> del servidor; no se publica en el repositorio."}, {"q": "¿Qué puerto usa?", "a": "<b>8000</b> por defecto."}, {"q": "¿Cuáles son los límites?", "a": "Los modelos $0 son temporales, no hay autenticación multiusuario y el failover depende del SDK."}]};</script>
-<script src="assets/community.js?v=5" defer></script>
+<script defer="" src="assets/community.js?v=5"></script>
 </body>
 </html>

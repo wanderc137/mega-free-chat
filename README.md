@@ -739,6 +739,57 @@ Sobre privacidad: cada proveedor declara si entrena con los datos; consultá la 
 
 ---
 
+## Ficha de evaluación
+
+**Madurez global: 4.0/5**
+
+| Criterio | Nota | Evidencia |
+|---|---:|---|
+| Madurez | 3/5 | Verificado GET /, GET /api/models (18 modelos gratuitos el 2026-08-28) y POST /api/chat con stream SSE completo; sin tests automatizados ni CI y con el failover incompleto. |
+| Reproducibilidad | 3/5 | run.sh crea .venv e instala requirements sin versiones fijadas; el README declara Python 3.10+ aunque la venv de referencia es 3.12. |
+| Documentación | 5/5 | README de 40 KB, datasheet de 28 KB, developer de 42 KB, bitácora con nueve problemas y estado de verificación separado en verificado y no verificado. |
+| Honestidad de límites | 5/5 | Declara que "gratis" es transitorio, que no midió latencias y que el failover no se ejercitó con un 429 real; enumera siete áreas no verificadas. |
+| Valor demostrativo | 4/5 | Cuatro capas separadas (server, pool, cliente, router), SSE consumido con fetch y ReadableStream, y cooldown de 300 s duplicado a 600 s para 429. |
+| Facilidad de despliegue | 4/5 | Un venv, cuatro dependencias y run.sh en primer plano en el puerto 8000; requiere API key sk-or-v1 y salida HTTPS a openrouter.ai. |
+
+Útil para quien quiera entender un router de modelos con failover y streaming sin montar infraestructura. Pesa más que el failover no cubra errores del primer intento y que el estado viva solo en RAM.
+
+## Lo que no funcionó
+
+### commits 2–3 · alcance — Firmware ESP8266 dentro del repositorio web
+
+El segundo commit añadió una API para microcontroladores y el firmware del ESP8266, lo que obligaba a clonar un dispositivo para leer el backend. Se separó en proxy-openrouter-ia-chinas con un commit propio el mismo día, antes de que el alcance creciera.
+
+### v1.0 · failover — El failover no cubre el primer intento
+
+chat_stream es un generador: llamarlo no ejecuta la petición, así que los except del router nunca ven el 429 del primer modelo. Se descubrió escribiendo la documentación y no en ejecución; quedó sin corregir como deuda prioritaria, con dos fixes descritos.
+
+### v1.0 · configuración — load_dotenv() llega tarde
+
+Los módulos leen os.getenv al importarse y el .env se carga después; con uvicorn server:app se ignoran BACKOFF_SECONDS, POOL_REFRESH_SECONDS y OR_BASE_URL. Se documentó en README, datasheet y developer, pero el cambio a lectura en runtime no está aplicado.
+
+### 2026-08-28 · clasificación — Falsos positivos de modelos chinos
+
+La keyword "ling" (Ling/InclusionAI) coincidía dentro de "inkling", así que modelos occidentales aparecían como chinos en el panel. Las keywords se convirtieron en expresiones regulares con límite de palabra.
+
+## Preguntas típicas
+
+**¿Qué es Mega Free Chat?**
+
+Una pasarela web local que consulta el catálogo de OpenRouter, filtra los modelos con precio $0 y enruta cada mensaje al primero disponible, entregando la respuesta por SSE.
+
+**¿Garantiza IA gratuita?**
+
+No. Se apoya en promociones del catálogo de OpenRouter; si no queda ningún modelo en $0, la app responde con un error explícito en lugar de usar un modelo pago.
+
+**¿Cómo se ejecuta?**
+
+Con python3 -m venv, pip install -r requirements.txt y run.sh o uvicorn; hay que definir OPENROUTER_API_KEY en .env y abrir localhost:8000.
+
+**¿Qué se puede reutilizar?**
+
+El pool dinámico con cooldown por modelo, la clasificación por proveedor y keyword, y el contrato SSE con eventos status, chunk, done y error.
+
 ## Licencia
 
 MIT — ver [`LICENSE`](LICENSE).
