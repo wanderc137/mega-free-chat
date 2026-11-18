@@ -291,7 +291,8 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
 @media(max-width:760px){.concept-grid,.fail-grid{grid-template-columns:1fr}.concept-side{border-left:0;padding-left:0}}
 
 </style>
-<link href="assets/community.css?v=5" rel="stylesheet"/></head>
+<link href="assets/community.css?v=5" rel="stylesheet"/><link href="rec/player.css?v=1" rel="stylesheet"/>
+</head>
 <body style="--accent:#4F8CFF;--accent2:#0F1115">
 <div class="grid-overlay"></div>
 <div class="glow one"></div>
@@ -306,6 +307,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
 <a href="#problema">Visión</a>
 <a href="#como">Cómo funciona</a>
 <a href="#arquitectura">Arquitectura</a>
+<a href="#video">Video</a>
 <a href="#docs">Documentación</a>
 <a href="#comunidad">Comunidad</a>
 <a class="btn btn-ghost" href="https://github.com/wanderc137/mega-free-chat" rel="noopener" style="padding:9px 15px" target="_blank">GitHub</a>
@@ -356,6 +358,45 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
 <div class="timeline reveal"><div class="step"><div class="step-num">01</div><div class="step-body"><h3>El navegador envía</h3><p>La UI manda el historial al backend por HTTP y abre un stream SSE para la respuesta.</p></div></div><div class="step"><div class="step-num">02</div><div class="step-body"><h3>El pool elige</h3><p>El backend consulta el catálogo de modelos gratuitos y prioriza los modelos chinos disponibles.</p></div></div><div class="step"><div class="step-num">03</div><div class="step-body"><h3>La respuesta fluye</h3><p>Los tokens llegan por SSE y se pintan en la burbuja sin esperar al final.</p></div></div><div class="step"><div class="step-num">04</div><div class="step-body"><h3>Si falla, rota</h3><p>Un error 429 o un timeout cambia el modelo y reintenta. El usuario ve una respuesta, no un stack trace.</p></div></div></div>
 </div>
 </section>
+
+<section class="section tight rec-section" id="video" style="--accent:#2E7DFF;--accent2:#14F195">
+<div class="wrap">
+<div class="rec-kicker">REC · VIDEO · 3:21</div>
+<h2 class="rec-h2">Mega Free Chat · failover entre modelos de $0</h2>
+<p class="rec-lead">Una pasarela FastAPI que descubre los modelos gratuitos de OpenRouter, mantiene su estado en memoria, los ordena con prioridad a proveedores chinos y transmite la respuesta por Server-Sent Events. Incluye el límite real del generador perezoso.</p>
+<div class="rec-banner">
+<span class="rec-banner-icon">📋</span>
+<strong>Puedes copiar y pegar los comandos del video desde el video !!!</strong>
+<span>Pausá, seleccioná el texto de la terminal y copiá.</span>
+</div>
+<div class="rec-shell">
+<div class="rec-bar"><i></i><i></i><i></i><span class="rec-title">Mega Free Chat · failover entre modelos de $0 · asciinema</span><span class="rec-rec"><b></b>REC</span></div>
+<div class="rec-screen-wrap">
+<div class="rec-screen" id="rec-screen"></div>
+<div class="rec-poster" id="rec-poster">
+<div class="rec-kicker">ASCIINEMA · 3:21</div>
+<h3>Mega Free Chat · failover entre modelos de $0</h3>
+<p>Una pasarela FastAPI que descubre los modelos gratuitos de OpenRouter, mantiene su estado en memoria, los ordena con prioridad a proveedores chinos y transmite la respuesta por Server-Sent Events. Incluye el límite real del generador perezoso.</p>
+<div class="rec-poster-meta">mega-free-chat · código real</div>
+<button class="rec-btn rec-primary" id="rec-start" type="button">▶ Reproducir</button>
+</div>
+</div>
+<div class="rec-controls">
+<button class="rec-btn rec-primary" id="rec-play" type="button">▶ Reproducir</button>
+<button class="rec-btn" id="rec-restart" type="button">↺ Reiniciar</button>
+<input class="rec-progress" id="rec-range" type="range" min="0" max="1000" value="0" aria-label="Progreso"/>
+<span class="rec-time" id="rec-time">0:00 / 3:21</span>
+<select class="rec-speed" id="rec-speed" aria-label="Velocidad"><option value="1">1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+<button class="rec-btn" id="rec-full" type="button" title="Pantalla completa">⛶</button>
+<button class="rec-btn" id="rec-copy" type="button">⧉ Copiar comandos</button>
+<a class="rec-download" href="rec/mega-free-chat.cast" download>descargar .cast</a>
+</div>
+</div>
+<p class="rec-note">Los fragmentos corresponden al código real del repositorio. La limitación del generador perezoso está tomada de docs/developer.md y del README; no se muestra ninguna API key.</p>
+<div class="rec-chapters"><span class="rec-chip"><b>0:06</b> EL PROBLEMA</span><span class="rec-chip"><b>0:24</b> ARQUITECTURA</span><span class="rec-chip"><b>0:40</b> DESCUBRIR EL POOL</span><span class="rec-chip"><b>0:57</b> ESTADO Y COOLDOWN</span><span class="rec-chip"><b>1:13</b> ORDEN</span><span class="rec-chip"><b>1:28</b> FAILOVER</span><span class="rec-chip"><b>1:46</b> EL CLIENTE</span><span class="rec-chip"><b>2:03</b> EL LÍMITE DOCUMENTADO</span><span class="rec-chip"><b>2:22</b> SSE</span><span class="rec-chip"><b>2:37</b> LA UI</span><span class="rec-chip"><b>2:55</b> CÓMO EJECUTARLO</span></div>
+</div>
+</section>
+
 <section class="section tight" id="arquitectura">
 <div class="wrap">
 <div class="section-head reveal">
@@ -468,5 +509,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08);pa
 </script>
 <script>window.PORTFOLIO_COMMUNITY = {"account": "wanderc137", "repo": "mega-free-chat", "coinNamespace": "wanderc137-mega-free-chat-coins-v1", "faqs": [{"q": "¿Qué es?", "a": "Una pasarela web de chat que descubre modelos gratuitos de OpenRouter y rota cuando uno falla."}, {"q": "¿Cómo funciona el streaming?", "a": "Usa <b>SSE</b>: el navegador recibe los tokens a medida que llegan, sin polling."}, {"q": "¿Dónde se guarda la API key?", "a": "En localStorage del navegador o en <code>.env</code> del servidor; no se publica en el repositorio."}, {"q": "¿Qué puerto usa?", "a": "<b>8000</b> por defecto."}, {"q": "¿Cuáles son los límites?", "a": "Los modelos $0 son temporales, no hay autenticación multiusuario y el failover depende del SDK."}]};</script>
 <script defer="" src="assets/community.js?v=6"></script>
+<script defer src="rec/mega-free-chat.cast.js?v=1"></script>
+<script defer src="rec/player.js?v=1"></script>
 </body>
 </html>
